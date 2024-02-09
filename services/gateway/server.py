@@ -1,26 +1,17 @@
 import uvicorn
 
-from pydantic import Json
-
 from decouple import config
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.responses import Response
 
 
-def app():
-    app = FastAPI()
+app = FastAPI()
 
-    @app.post(
-        "",
-        responses={200: {"content": {"image/png": {}}}},
-        response_class=Response,
-    )
-    async def plot_request(
-        rawData: UploadFile = File(...),
-    ):
-        return {"message":"Hello World!"}
 
-    return app
+@app.post("/")
+async def plot_request(upload_file: UploadFile = File(...),
+):
+    return {"message": "test"}
 
 
 def run():
