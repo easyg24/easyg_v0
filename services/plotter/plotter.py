@@ -12,19 +12,23 @@ def get_data(file_path):
 
     return df
 
-
-def plot_data(data, configs):
-    fig = plt.figure()
-    
+def build_configs(configs):
     plt.title(configs.title)
     plt.xlabel(configs.xlabel)
     plt.ylabel(configs.ylabel)
     plt.grid(configs.grid)
     
+
+def build_plot(data):
     plt.plot(data)
     plt.scatter(data.index, data.y)
 
-    plt.show()
+
+def build_graph(data, configs):
+    fig = plt.figure()
+    
+    build_configs(configs=configs)
+    build_plot(data=data)
 
     buffer = BytesIO()
     fig.savefig(buffer, format="png")
@@ -35,7 +39,7 @@ def plot_data(data, configs):
 def run():
     file_path = "../../tests/data/test.csv"
     data = get_data(file_path)
-    response = plot_data(data, Configurations())
+    response = build_graph(data, Configurations())
     
     image = Image.open(BytesIO(response))
     image.save('./tmp/test.png')
