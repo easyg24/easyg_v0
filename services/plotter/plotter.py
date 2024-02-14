@@ -1,3 +1,6 @@
+from io import BytesIO
+
+import PIL.Image as Image
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -11,6 +14,8 @@ def get_data(file_path):
 
 
 def plot_data(data, configs):
+    fig = plt.figure()
+    
     plt.title(configs.title)
     plt.xlabel(configs.xlabel)
     plt.ylabel(configs.ylabel)
@@ -18,14 +23,22 @@ def plot_data(data, configs):
     
     plt.plot(data)
     plt.scatter(data.index, data.y)
-    
+
     plt.show()
+
+    buffer = BytesIO()
+    fig.savefig(buffer, format="png")
+
+    return buffer.getvalue()
 
 
 def run():
     file_path = "../../tests/data/test.csv"
     data = get_data(file_path)
-    plot_data(data, Configurations())
+    response = plot_data(data, Configurations())
+    
+    image = Image.open(BytesIO(response))
+    image.save('./tmp/test.png')
 
 
 if __name__ == "__main__":
