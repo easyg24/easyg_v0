@@ -5,9 +5,6 @@ import matplotlib.pyplot as plt
 
 from .models import Configurations
 
-# import matplotlib
-# matplotlib.use("agg")
-
 
 def get_data(rawData: bytes):
     df = pd.read_csv(rawData, sep=",", index_col=0)

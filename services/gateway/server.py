@@ -2,7 +2,6 @@ import io
 import sys
 
 import uvicorn
-from json import loads
 import PIL.Image as Image
 from decouple import config
 from pydantic import Json
