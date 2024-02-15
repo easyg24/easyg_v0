@@ -1,17 +1,31 @@
-import uvicorn
+import io
+import sys
 
+import uvicorn
+import PIL.Image as Image
 from decouple import config
-from fastapi import FastAPI, File, Form, UploadFile
-from fastapi.responses import Response
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
+
+sys.path.append("..\\services")
+from plotter.plotter import build_graph
+from plotter.models import Configurations
 
 
 app = FastAPI()
 
 
-@app.post("/")
-async def plot_request(upload_file: UploadFile = File(...),
-):
-    return {"message": "test"}
+@app.post("/", responses = {200:{"content": {"image/png": {}}}})
+async def plot_request(
+    file: UploadFile = File(...), 
+    configs: Configurations = Configurations()):
+    
+    response = build_graph(file, configs)
+
+    image = Image.open(io.BytesIO(response))
+    image.save('.\\plotter\\tmp\\test.png')
+
+    return FileResponse('.\\plotter\\tmp\\test.png')
 
 
 def run():
