@@ -2,9 +2,12 @@ import io
 import sys
 
 import uvicorn
+from json import loads
 import PIL.Image as Image
 from decouple import config
-from fastapi import FastAPI, File, UploadFile
+from pydantic import Json
+from typing import Optional
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import FileResponse
 
 sys.path.append("..\\services")
@@ -17,8 +20,8 @@ app = FastAPI()
 
 @app.post("/", responses = {200:{"content": {"image/png": {}}}})
 async def plot_request(
-    file: UploadFile = File(...), 
-    configs: Configurations = Configurations()):
+    file: Optional[UploadFile] = File(None), 
+    configs: Optional[Json[Configurations]] = Form(None)):
     
     response = build_graph(file, configs)
 

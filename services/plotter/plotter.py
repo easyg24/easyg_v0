@@ -28,10 +28,14 @@ def build_plot(data):
 def build_graph(file, configs):
     fig = plt.figure()
 
-    data = get_data(file.file)
-
+    if not configs:
+        configs = Configurations()
+    
     build_configs(configs=configs)
-    build_plot(data=data)
+
+    if file:
+        data = get_data(file.file)
+        build_plot(data=data)
 
     buffer = BytesIO()
     fig.savefig(buffer, format="png")
